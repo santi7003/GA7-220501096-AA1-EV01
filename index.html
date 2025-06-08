@@ -1,33 +1,429 @@
-<!doctype html>
-<html class="no-js" lang="">
-
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instrumento de Evaluación - SENA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
 
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .sena-logo {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(45deg, #FF6B35, #F7931E);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 24px;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    .header h1 {
+      color: #2c3e50;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 1.2rem;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h2 {
+      color: #2c3e50;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .info-item {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: rgba(102, 126, 234, 0.1);
+      border-left: 4px solid #667eea;
+      border-radius: 5px;
+    }
+
+    .info-item strong {
+      color: #2c3e50;
+    }
+
+    .criteria-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .criteria-list li {
+      background: rgba(118, 75, 162, 0.1);
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 4px solid #764ba2;
+      transition: background 0.3s ease;
+    }
+
+    .criteria-list li:hover {
+      background: rgba(118, 75, 162, 0.2);
+    }
+
+    .checklist-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .checklist-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .checklist-table th,
+    .checklist-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+    }
+
+    .checklist-table th {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      font-weight: 600;
+    }
+
+    .checklist-table tr:hover {
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    .percentage {
+      background: linear-gradient(45deg, #FF6B35, #F7931E);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .author-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .author-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .author-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .author-card p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 10px;
+      }
+
+      .card, .header, .checklist-section, .author-section {
+        padding: 20px;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+  </style>
 </head>
-
 <body>
+<div class="container">
+  <header class="header fade-in">
+    <div class="sena-logo pulse">SENA</div>
+    <h1>Instrumento de Evaluación</h1>
+    <p>Tecnología en Análisis y Desarrollo de Software</p>
+  </header>
 
-  <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
-  <script src="js/app.js"></script>
+  <div class="main-content fade-in">
+    <div class="card">
+      <h2><span class="icon">📋</span>Datos Generales</h2>
+      <div class="info-item">
+        <strong>Programa de formación:</strong><br>
+        Análisis y desarrollo de software
+      </div>
+      <div class="info-item">
+        <strong>Proyecto formativo:</strong><br>
+        Construcción de software integrador de tecnologías orientadas a servicios
+      </div>
+      <div class="info-item">
+        <strong>Fase proyecto:</strong><br>
+        Ejecución
+      </div>
+      <div class="info-item">
+        <strong>Resultado de aprendizaje:</strong><br>
+        220501096-01 Planear actividades de construcción del software de acuerdo con el diseño establecido
+      </div>
+    </div>
 
+    <div class="card">
+      <h2><span class="icon">🎯</span>Actividad y Evidencia</h2>
+      <div class="info-item">
+        <strong>Actividad de aprendizaje:</strong><br>
+        GA7-220501096-AA1- Configurar herramientas de versionamiento para control de código
+      </div>
+      <div class="info-item">
+        <strong>Evidencia de conocimiento:</strong><br>
+        Informe técnico de plan de trabajo para construcción de software. GA7-220501096-AA1-EV01
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <h2><span class="icon">✅</span>Criterios de Evaluación</h2>
+    <ul class="criteria-list">
+      <li>Interpreta el informe de diseño para definir el plan de trabajo en la construcción del software.</li>
+      <li>Selecciona y configura herramientas de desarrollo de acuerdo con las condiciones del software a construir.</li>
+      <li>Define estándares de codificación de acuerdo con las reglas de la plataforma de desarrollo seleccionada.</li>
+    </ul>
+  </div>
+
+  <div class="checklist-section fade-in">
+    <h2><span class="icon">📊</span>Lista de Chequeo</h2>
+    <table class="checklist-table">
+      <thead>
+      <tr>
+        <th>No.</th>
+        <th>Variables/Indicadores de Logro</th>
+        <th>Porcentaje</th>
+        <th>Cumple</th>
+        <th>Observaciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>Diferencia con claridad versionamientos locales y remotos</td>
+        <td><span class="percentage">30%</span></td>
+        <td>SI / NO</td>
+        <td>_____________</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Selecciona y describe herramientas de desarrollo a utilizar para la codificación del software</td>
+        <td><span class="percentage">30%</span></td>
+        <td>SI / NO</td>
+        <td>_____________</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Selecciona y describe herramientas de versionamiento</td>
+        <td><span class="percentage">30%</span></td>
+        <td>SI / NO</td>
+        <td>_____________</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Presenta el informe cumpliendo con las normas básicas de presentación de documentos</td>
+        <td><span class="percentage">10%</span></td>
+        <td>SI / NO</td>
+        <td>_____________</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="author-section fade-in">
+    <h2><span class="icon">👨‍💻</span>Elaborado por</h2>
+    <div class="author-card">
+      <h3>Santiago Espinosa Salgado</h3>
+      <p><strong>Programa:</strong> Tecnología en Análisis y Desarrollo de Software</p>
+      <p><strong>Ficha:</strong> 2885525</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Agregar animaciones cuando los elementos entran en la vista
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeIn 0.8s ease-in forwards';
+      }
+    });
+  }, observerOptions);
+
+  // Observar todos los elementos con la clase fade-in
+  document.querySelectorAll('.fade-in').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Efecto hover en las filas de la tabla
+  document.querySelectorAll('.checklist-table tr').forEach(row => {
+    row.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.02)';
+      this.style.transition = 'transform 0.2s ease';
+    });
+
+    row.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+    });
+  });
+
+  // Efecto de partículas en el fondo
+  function createParticle() {
+    const particle = document.createElement('div');
+    particle.style.position = 'fixed';
+    particle.style.width = '4px';
+    particle.style.height = '4px';
+    particle.style.background = 'rgba(255, 255, 255, 0.3)';
+    particle.style.borderRadius = '50%';
+    particle.style.pointerEvents = 'none';
+    particle.style.left = Math.random() * window.innerWidth + 'px';
+    particle.style.top = window.innerHeight + 'px';
+    particle.style.zIndex = '1';
+
+    document.body.appendChild(particle);
+
+    const animation = particle.animate([
+      { transform: 'translateY(0px)', opacity: 0.3 },
+      { transform: 'translateY(-' + (window.innerHeight + 100) + 'px)', opacity: 0 }
+    ], {
+      duration: Math.random() * 3000 + 2000,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => particle.remove();
+  }
+
+  // Crear partículas ocasionalmente
+  setInterval(createParticle, 300);
+</script>
 </body>
-
 </html>
