@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Versionado Local vs Remoto</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 600px;
+    }
+
+    .section {
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .local {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    .remote {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    .section h2 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .section h3 {
+      font-size: 1.4em;
+      margin: 25px 0 15px 0;
+      position: relative;
+      z-index: 2;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 5px;
+    }
+
+    .section ul {
+      list-style: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section li {
+      margin: 12px 0;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section li:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .command {
+      background: rgba(0, 0, 0, 0.3) !important;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      border-left: 4px solid rgba(255, 255, 255, 0.6);
+      padding-left: 20px;
+    }
+
+    .comparison {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      padding: 40px;
+      color: #2c3e50;
+    }
+
+    .comparison h2 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .comparison-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .comparison-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .comparison-card h3 {
+      color: #e74c3c;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+    }
+
+    .interactive-demo {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px;
+      color: white;
+    }
+
+    .demo-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .demo-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .timeline {
+      position: relative;
+      margin: 20px 0;
+    }
+
+    .timeline-item {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border-left: 4px solid #f39c12;
+      animation: slideIn 0.5s ease forwards;
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .sync-button {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 20px auto;
+      display: block;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .sync-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .status {
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-container {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      .section {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🔄 Versionado Local vs Remoto</h1>
+    <p>Comprende las diferencias fundamentales entre Git local y remoto</p>
+  </div>
+
+  <div class="content">
+    <div class="section local">
+      <h2>💻 Versionado Local</h2>
+
+      <h3>¿Qué es?</h3>
+      <ul>
+        <li>Repositorio Git almacenado en tu computadora local</li>
+        <li>Historial de cambios guardado en la carpeta .git/</li>
+        <li>Funciona sin conexión a internet</li>
+        <li>Solo tú tienes acceso directo</li>
+      </ul>
+
+      <h3>Comandos Principales</h3>
+      <ul>
+        <li class="command">git init - Inicializa repositorio local</li>
+        <li class="command">git add . - Prepara archivos para commit</li>
+        <li class="command">git commit -m "mensaje" - Guarda cambios</li>
+        <li class="command">git log - Ve historial de commits</li>
+        <li class="command">git branch - Maneja ramas locales</li>
+      </ul>
+
+      <h3>Ventajas</h3>
+      <ul>
+        <li>⚡ Operaciones muy rápidas</li>
+        <li>🔒 Privacidad total</li>
+        <li>📱 Trabajo offline</li>
+        <li>🎯 Control total del código</li>
+      </ul>
+    </div>
+
+    <div class="section remote">
+      <h2>☁️ Versionado Remoto</h2>
+
+      <h3>¿Qué es?</h3>
+      <ul>
+        <li>Repositorio Git alojado en un servidor (GitHub, GitLab, etc.)</li>
+        <li>Historial compartido entre múltiples desarrolladores</li>
+        <li>Requiere conexión a internet para sincronizar</li>
+        <li>Acceso controlado por permisos</li>
+      </ul>
+
+      <h3>Comandos Principales</h3>
+      <ul>
+        <li class="command">git clone [url] - Descarga repositorio</li>
+        <li class="command">git push - Sube cambios al remoto</li>
+        <li class="command">git pull - Descarga cambios remotos</li>
+        <li class="command">git fetch - Obtiene info sin fusionar</li>
+        <li class="command">git remote -v - Ve repositorios remotos</li>
+      </ul>
+
+      <h3>Ventajas</h3>
+      <ul>
+        <li>👥 Colaboración en equipo</li>
+        <li>☁️ Backup automático</li>
+        <li>🌍 Acceso desde cualquier lugar</li>
+        <li>🔄 Sincronización automática</li>
+      </ul>
+    </div>
+
+    <div class="comparison">
+      <h2>📊 Comparación Detallada</h2>
+
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <h3>🏠 Ubicación</h3>
+          <p><strong>Local:</strong> En tu computadora, carpeta .git/</p>
+          <p><strong>Remoto:</strong> En servidores (GitHub, GitLab, Bitbucket)</p>
+        </div>
+
+        <div class="comparison-card">
+          <h3>🌐 Conectividad</h3>
+          <p><strong>Local:</strong> Funciona sin internet</p>
+          <p><strong>Remoto:</strong> Requiere conexión a internet</p>
+        </div>
+
+        <div class="comparison-card">
+          <h3>👥 Colaboración</h3>
+          <p><strong>Local:</strong> Solo acceso individual</p>
+          <p><strong>Remoto:</strong> Múltiples colaboradores simultáneos</p>
+        </div>
+
+        <div class="comparison-card">
+          <h3>💾 Backup</h3>
+          <p><strong>Local:</strong> Riesgo de pérdida si falla el disco</p>
+          <p><strong>Remoto:</strong> Backup automático y distribuido</p>
+        </div>
+
+        <div class="comparison-card">
+          <h3>⚡ Velocidad</h3>
+          <p><strong>Local:</strong> Operaciones instantáneas</p>
+          <p><strong>Remoto:</strong> Depende de la velocidad de internet</p>
+        </div>
+
+        <div class="comparison-card">
+          <h3>🔐 Privacidad</h3>
+          <p><strong>Local:</strong> Completamente privado</p>
+          <p><strong>Remoto:</strong> Puede ser público o privado</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="interactive-demo">
+      <h2>🎮 Simulación Interactiva</h2>
+
+      <div class="demo-container">
+        <div class="demo-section">
+          <h3>💻 Repositorio Local</h3>
+          <div id="local-timeline" class="timeline">
+            <div class="timeline-item">📁 Commit inicial: "Proyecto creado"</div>
+            <div class="timeline-item">✨ Commit: "Añadida función login"</div>
+            <div class="timeline-item">🐛 Commit: "Corregido bug en navbar"</div>
+            <div class="timeline-item">🎨 Commit: "Mejorado diseño CSS"</div>
+          </div>
+          <div class="status" id="local-status">Estado: Actualizado localmente</div>
+        </div>
+
+        <div class="demo-section">
+          <h3>☁️ Repositorio Remoto</h3>
+          <div id="remote-timeline" class="timeline">
+            <div class="timeline-item">📁 Commit inicial: "Proyecto creado"</div>
+            <div class="timeline-item">✨ Commit: "Añadida función login"</div>
+          </div>
+          <div class="status" id="remote-status">Estado: Desactualizado (2 commits atrás)</div>
+        </div>
+      </div>
+
+      <button class="sync-button" onclick="syncRepositories()">
+        🚀 Ejecutar git push (Sincronizar)
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let isSynced = false;
+
+  function syncRepositories() {
+    const button = document.querySelector('.sync-button');
+    const remoteTimeline = document.getElementById('remote-timeline');
+    const remoteStatus = document.getElementById('remote-status');
+    const localStatus = document.getElementById('local-status');
+
+    if (!isSynced) {
+      // Simular sincronización
+      button.textContent = '⏳ Sincronizando...';
+      button.disabled = true;
+
+      setTimeout(() => {
+        // Añadir commits faltantes al remoto
+        const newCommits = [
+          '<div class="timeline-item" style="border-left-color: #27ae60;">🐛 Commit: "Corregido bug en navbar"</div>',
+          '<div class="timeline-item" style="border-left-color: #27ae60;">🎨 Commit: "Mejorado diseño CSS"</div>'
+        ];
+
+        newCommits.forEach((commit, index) => {
+          setTimeout(() => {
+            remoteTimeline.innerHTML += commit;
+          }, index * 500);
+        });
+
+        setTimeout(() => {
+          remoteStatus.textContent = 'Estado: ✅ Sincronizado con local';
+          remoteStatus.style.background = 'rgba(46, 204, 113, 0.3)';
+          localStatus.textContent = 'Estado: ✅ Sincronizado con remoto';
+          localStatus.style.background = 'rgba(46, 204, 113, 0.3)';
+
+          button.textContent = '🔄 Simular más cambios';
+          button.disabled = false;
+          isSynced = true;
+        }, 1500);
+      }, 1000);
+
+    } else {
+      // Reset para nueva simulación
+      location.reload();
+    }
+  }
+
+  // Animación de entrada
+  window.addEventListener('load', () => {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach((section, index) => {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(50px)';
+      setTimeout(() => {
+        section.style.transition = 'all 0.8s ease';
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+      }, index * 200);
+    });
+  });
+</script>
+</body>
+</html>

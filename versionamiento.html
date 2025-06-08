@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herramientas de Versionamiento - Git</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    .git-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+      background: #f1502f;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      position: relative;
+      z-index: 1;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(241, 80, 47, 0.4);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(241, 80, 47, 0);
+      }
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 30px;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 15px;
+      border-left: 5px solid #f1502f;
+      transition: all 0.3s ease;
+      animation: fadeInLeft 0.8s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .section:hover::before {
+      left: 100%;
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h2 {
+      color: #2c3e50;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      background: #f1502f;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .tool-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #f1502f, #ff6b35);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .tool-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border-color: #f1502f;
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .tool-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .github-logo { background: #24292e; }
+    .gitlab-logo { background: #fc6d26; }
+    .bitbucket-logo { background: #0052cc; }
+    .sourcetree-logo { background: #0052cc; }
+    .gitkraken-logo { background: #179287; }
+    .vscode-logo { background: #007acc; }
+
+    .tool-card h3 {
+      color: #2c3e50;
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    .tool-card .category {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .tool-description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .features {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .features h4 {
+      color: #f1502f;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .features ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .features li {
+      padding: 5px 0;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .recommendation {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      margin-top: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .recommendation::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 15s linear infinite reverse;
+      pointer-events: none;
+    }
+
+    .recommendation h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .recommendation p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .workflow-section {
+      background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+      border-left-color: #2196f3;
+    }
+
+    .best-practices {
+      background: linear-gradient(135deg, #fff3e0, #fce4ec);
+      border-left-color: #ff9800;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        font-size: 2.2rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .tool-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .section {
+        padding: 20px;
+        margin-bottom: 30px;
+      }
+
+      .section h2 {
+        font-size: 1.5rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+
+      .tool-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+
+      .recommendation {
+        padding: 25px 20px;
+      }
+
+      .recommendation h3 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 10px;
+        border-radius: 15px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .git-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+      }
+
+      .tool-card {
+        padding: 20px;
+      }
+
+      .features {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="git-icon">G</div>
+    <h1>Herramientas de Versionamiento</h1>
+    <p>Selección y descripción de herramientas Git para el proyecto</p>
+  </div>
+
+  <div class="content">
+    <div class="section">
+      <h2>
+        <div class="section-icon">🏛️</div>
+        Plataformas de Repositorios
+      </h2>
+      <p>Servicios en la nube para alojar y gestionar repositorios Git con funcionalidades adicionales de colaboración.</p>
+
+      <div class="tool-grid">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo github-logo">GH</div>
+            <h3>GitHub</h3>
+            <div class="category">Repositorio</div>
+          </div>
+          <div class="tool-description">
+            La plataforma más popular para alojar repositorios Git. Ofrece herramientas completas de colaboración, CI/CD y gestión de proyectos.
+          </div>
+          <div class="features">
+            <h4>Características principales:</h4>
+            <ul>
+              <li>Pull requests y code reviews</li>
+              <li>GitHub Actions (CI/CD)</li>
+              <li>Issues y project boards</li>
+              <li>GitHub Pages para sitios estáticos</li>
+              <li>Integración con miles de herramientas</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo gitlab-logo">GL</div>
+            <h3>GitLab</h3>
+            <div class="category">Repositorio</div>
+          </div>
+          <div class="tool-description">
+            Plataforma completa DevOps que incluye repositorios Git, CI/CD integrado y herramientas de gestión de proyectos.
+          </div>
+          <div class="features">
+            <h4>Características principales:</h4>
+            <ul>
+              <li>CI/CD integrado y avanzado</li>
+              <li>Container Registry incluido</li>
+              <li>Merge requests y code quality</li>
+              <li>Kubernetes integration</li>
+              <li>Security scanning automático</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo bitbucket-logo">BB</div>
+            <h3>Bitbucket</h3>
+            <div class="category">Repositorio</div>
+          </div>
+          <div class="tool-description">
+            Servicio de Atlassian que se integra perfectamente con Jira y Confluence para equipos que usan el ecosistema Atlassian.
+          </div>
+          <div class="features">
+            <h4>Características principales:</h4>
+            <ul>
+              <li>Integración nativa con Jira</li>
+              <li>Bitbucket Pipelines (CI/CD)</li>
+              <li>Pull requests avanzados</li>
+              <li>Branch permissions flexibles</li>
+              <li>Smart mirroring</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>
+        <div class="section-icon">🖥️</div>
+        Clientes GUI para Git
+      </h2>
+      <p>Interfaces gráficas que simplifican el uso de Git para desarrolladores que prefieren herramientas visuales.</p>
+
+      <div class="tool-grid">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo sourcetree-logo">ST</div>
+            <h3>Sourcetree</h3>
+            <div class="category">GUI Client</div>
+          </div>
+          <div class="tool-description">
+            Cliente Git gratuito de Atlassian con interfaz intuitiva, ideal para principiantes y usuarios avanzados.
+          </div>
+          <div class="features">
+            <h4>Características principales:</h4>
+            <ul>
+              <li>Visualización gráfica del historial</li>
+              <li>Git Flow integrado</li>
+              <li>Staging interactivo</li>
+              <li>Integración con Bitbucket y GitHub</li>
+              <li>Herramientas de merge avanzadas</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo gitkraken-logo">GK</div>
+            <h3>GitKraken</h3>
+            <div class="category">GUI Client</div>
+          </div>
+          <div class="tool-description">
+            Cliente Git premium con interfaz moderna y potentes herramientas de visualización y colaboración.
+          </div>
+          <div class="features">
+            <h4>Características principales:</h4>
+            <ul>
+              <li>Interfaz visual impresionante</li>
+              <li>GitKraken Boards (kanban)</li>
+              <li>Merge conflict editor integrado</li>
+              <li>Multi-platform (Electron)</li>
+              <li>Integraciones extensas</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo vscode-logo">VS</div>
+            <h3>VS Code Git</h3>
+            <div class="category">IDE Integration</div>
+          </div>
+          <div class="tool-description">
+            Integración nativa de Git en Visual Studio Code con funcionalidades completas sin salir del editor.
+          </div>
+          <div class="features">
+            <h4>Características principales:</h4>
+            <ul>
+              <li>Source Control integrado</li>
+              <li>Diff viewer en línea</li>
+              <li>GitLens extension avanzada</li>
+              <li>Terminal integrado</li>
+              <li>Extensions del marketplace</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section workflow-section">
+      <h2>
+        <div class="section-icon">🔄</div>
+        Flujo de Trabajo Recomendado
+      </h2>
+      <p><strong>Git Flow:</strong> Modelo de branching que define roles específicos para diferentes tipos de ramas y cómo deben interactuar entre sí.</p>
+
+      <div class="features">
+        <h4>Estructura de ramas:</h4>
+        <ul>
+          <li><strong>main/master:</strong> Rama principal con código de producción</li>
+          <li><strong>develop:</strong> Rama de desarrollo con últimas características</li>
+          <li><strong>feature/*:</strong> Ramas para nuevas funcionalidades</li>
+          <li><strong>release/*:</strong> Ramas para preparar nuevas versiones</li>
+          <li><strong>hotfix/*:</strong> Ramas para correcciones urgentes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section best-practices">
+      <h2>
+        <div class="section-icon">💡</div>
+        Mejores Prácticas
+      </h2>
+      <div class="features">
+        <h4>Commits:</h4>
+        <ul>
+          <li>Usar mensajes descriptivos y concisos</li>
+          <li>Commits atómicos (un cambio lógico por commit)</li>
+          <li>Usar conventional commits para automatización</li>
+        </ul>
+      </div>
+
+      <div class="features">
+        <h4>Branching:</h4>
+        <ul>
+          <li>Proteger ramas principales con branch protection</li>
+          <li>Requerir pull requests para cambios importantes</li>
+          <li>Usar nombres descriptivos para las ramas</li>
+        </ul>
+      </div>
+
+      <div class="features">
+        <h4>Colaboración:</h4>
+        <ul>
+          <li>Code reviews obligatorios</li>
+          <li>Tests automatizados en CI/CD</li>
+          <li>Documentación actualizada en README</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <h3>🎯 Recomendación para el Proyecto</h3>
+      <p>
+        Para este proyecto, recomendamos usar <strong>GitHub</strong> como plataforma principal de repositorio debido a su amplia adopción,
+        excelente integración con herramientas de CI/CD, y comunidad activa. Como cliente GUI, <strong>VS Code</strong> con la extensión
+        GitLens ofrece la mejor experiencia integrada para desarrollo, mientras que <strong>Sourcetree</strong> es ideal para
+        operaciones Git más complejas que requieren visualización avanzada.
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

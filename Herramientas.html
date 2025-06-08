@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herramientas de Desarrollo Seleccionadas</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+      padding: 40px 0;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .tool-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .tool-icon {
+      width: 60px;
+      height: 60px;
+      margin-right: 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+    }
+
+    .github-icon {
+      background: linear-gradient(135deg, #24292e, #586069);
+    }
+
+    .gitlab-icon {
+      background: linear-gradient(135deg, #fc6d26, #fca326);
+    }
+
+    .tool-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .tool-subtitle {
+      color: #7f8c8d;
+      font-size: 1rem;
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section h3 {
+      color: #34495e;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      border-left: 4px solid #3498db;
+      padding-left: 10px;
+    }
+
+    .section p, .section li {
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .features-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .features-list li {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    .features-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .comparison-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .comparison-table th {
+      background: #f8f9fa;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .comparison-table tr:hover {
+      background: #f1f2f6;
+    }
+
+    .conclusion {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .conclusion h2 {
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .tool-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Selección de Herramientas de Desarrollo</h1>
+    <p>Herramientas Escogidas para la Codificación del Software</p>
+  </header>
+
+  <div class="tools-grid">
+    <!-- GitHub Card -->
+    <div class="tool-card">
+      <div class="tool-header">
+        <div class="tool-icon github-icon">🐱</div>
+        <div>
+          <div class="tool-title">GitHub</div>
+          <div class="tool-subtitle">Plataforma de desarrollo colaborativo</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Descripción</h3>
+        <p>GitHub es la plataforma líder mundial para el desarrollo colaborativo de software, basada en Git. Ofrece repositorios remotos, control de versiones distribuido y herramientas avanzadas para la gestión de proyectos de desarrollo.</p>
+      </div>
+
+      <div class="section">
+        <h3>Características Principales</h3>
+        <ul class="features-list">
+          <li>Repositorios públicos y privados ilimitados</li>
+          <li>Control de versiones con Git integrado</li>
+          <li>GitHub Actions para CI/CD</li>
+          <li>Issues y Project Management</li>
+          <li>Pull Requests y Code Review</li>
+          <li>GitHub Pages para hosting estático</li>
+          <li>Integración con múltiples herramientas</li>
+          <li>Comunidad masiva de desarrolladores</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>Ventajas</h3>
+        <ul class="features-list">
+          <li>Ecosistema más grande del mundo</li>
+          <li>Excelente documentación y recursos</li>
+          <li>Interfaz intuitiva y fácil de usar</li>
+          <li>Integración nativa con herramientas populares</li>
+          <li>GitHub Copilot para asistencia con IA</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- GitLab Card -->
+    <div class="tool-card">
+      <div class="tool-header">
+        <div class="tool-icon gitlab-icon">🦊</div>
+        <div>
+          <div class="tool-title">GitLab</div>
+          <div class="tool-subtitle">Plataforma DevOps completa</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Descripción</h3>
+        <p>GitLab es una plataforma DevOps completa que proporciona un ciclo de vida completo de desarrollo de software en una sola aplicación. Incluye gestión de código fuente, CI/CD, monitoreo y seguridad integrada.</p>
+      </div>
+
+      <div class="section">
+        <h3>Características Principales</h3>
+        <ul class="features-list">
+          <li>Plataforma DevOps todo-en-uno</li>
+          <li>CI/CD integrado y avanzado</li>
+          <li>Container Registry incluido</li>
+          <li>Herramientas de seguridad integradas</li>
+          <li>Wiki y documentación integrada</li>
+          <li>Monitoreo y métricas</li>
+          <li>Auto DevOps para configuración automática</li>
+          <li>Opción self-hosted disponible</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>Ventajas</h3>
+        <ul class="features-list">
+          <li>Solución completa integrada</li>
+          <li>Excelentes capacidades de CI/CD</li>
+          <li>Opciones de despliegue flexibles</li>
+          <li>Herramientas de seguridad avanzadas</li>
+          <li>Control total con versión self-hosted</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h2 style="color: #2c3e50; margin-bottom: 20px; text-align: center;">Comparación Detallada</h2>
+
+    <table class="comparison-table">
+      <thead>
+      <tr>
+        <th>Aspecto</th>
+        <th>GitHub</th>
+        <th>GitLab</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><strong>Repositorios Privados</strong></td>
+        <td>Ilimitados (gratis)</td>
+        <td>Ilimitados (gratis)</td>
+      </tr>
+      <tr>
+        <td><strong>CI/CD</strong></td>
+        <td>GitHub Actions (2000 min/mes gratis)</td>
+        <td>Integrado (400 min/mes gratis)</td>
+      </tr>
+      <tr>
+        <td><strong>Comunidad</strong></td>
+        <td>Más grande del mundo</td>
+        <td>Creciente y activa</td>
+      </tr>
+      <tr>
+        <td><strong>Hosting Propio</strong></td>
+        <td>GitHub Enterprise Server</td>
+        <td>GitLab CE/EE (gratuito/premium)</td>
+      </tr>
+      <tr>
+        <td><strong>Interfaz</strong></td>
+        <td>Limpia y familiar</td>
+        <td>Completa, puede ser compleja</td>
+      </tr>
+      <tr>
+        <td><strong>Integraciones</strong></td>
+        <td>Ecosystem extenso</td>
+        <td>Todo integrado nativamente</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="conclusion">
+    <h2>Justificación de la Selección</h2>
+    <p>La selección de GitHub y GitLab como herramientas principales de desarrollo se basa en sus fortalezas complementarias. GitHub ofrece la mayor comunidad de desarrolladores y ecosistema de integraciones, mientras que GitLab proporciona una solución DevOps completa e integrada. Esta combinación permite flexibilidad en diferentes tipos de proyectos y necesidades organizacionales.</p>
+    <br>
+    <p><strong>Recomendación:</strong> Utilizar GitHub para proyectos open source y colaboración comunitaria, y GitLab para proyectos empresariales que requieren un pipeline DevOps completo.</p>
+  </div>
+</div>
+</body>
+</html>
